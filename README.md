@@ -8,4 +8,4 @@ In this initial deployment it functions as a shape matcher, using a stop sign te
 
 #### Potential Direction
 
-Eventially this matching could be used as the base function for a First Response pregnancy test reader app (Clone).
+Eventually this matching could be used as the base function for a First Response pregnancy test reader app (Clone).
