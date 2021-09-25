@@ -50,7 +50,7 @@ namespace EmguCVDemoJmalino
         {
             try
             {
-                // reads stop sign file from computer, default template to match
+                // reads stop sign file from computer, default template to match uploaded images to
                 Image<Bgr, byte> imgTemplate = new Image<Bgr, byte>(@"C:\Users\jessa\OneDrive - Grand Valley State University\Documents\GVSU\Graduate Classes\CIS 641 Systems Analysis and Design\STOP-sign.jpg");
                 ApplyShapeMatching(imgTemplate);
             }
@@ -83,9 +83,9 @@ namespace EmguCVDemoJmalino
                 var imgSourceContours = CalculateContours(imgSource);
                 var imgTargetContours = CalculateContours(imgTarget);
 
-                // exception handling
                 if (imgSourceContours.Size == 0 || imgTargetContours.Size == 0)
                 {
+                    // exception handling for poor image selection
                     throw new Exception("Not enough contours");
                 }
 
@@ -107,10 +107,12 @@ namespace EmguCVDemoJmalino
             }
             catch(Exception ex)
             {
+                //
                 throw new Exception(ex.Message);
             }
         }
 
+        //calculate contrours, a necessary input for CvInvoke
         private VectorOfVectorOfPoint CalculateContours(Image<Gray, byte> img, double thresholdarea = 1000)
         {
             try
@@ -122,6 +124,8 @@ namespace EmguCVDemoJmalino
                     Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
 
                 VectorOfVectorOfPoint filteredContours = new VectorOfVectorOfPoint();
+                
+                // filtering out text using threshholdarea defined in method
                 for (int i = 0; i < contours.Size; i++)
                 {
                     var area = CvInvoke.ContourArea(contours[i]);
@@ -135,6 +139,7 @@ namespace EmguCVDemoJmalino
             }
             catch (Exception ex)
             {
+                //
                 throw new Exception(ex.Message);
             }
         }
