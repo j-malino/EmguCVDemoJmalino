@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.CV.CvEnum;
 
 namespace EmguCVDemoJmalino
 {
@@ -51,8 +52,13 @@ namespace EmguCVDemoJmalino
             try
             {
                 // reads stop sign file from computer, default template to match uploaded images to
-                Image<Bgr, byte> imgTemplate = new Image<Bgr, byte>(@"C:\Users\jessa\OneDrive - Grand Valley State University\Documents\GVSU\Graduate Classes\CIS 641 Systems Analysis and Design\STOP-sign.jpg");
-                ApplyShapeMatching(imgTemplate);
+                // will be replaced in future update to custom uploaded form
+                // Replaced in Update Image<Bgr, byte> imgTemplate = new Image<Bgr, byte>(@"C:\Users\jessa\OneDrive - Grand Valley State University\Documents\GVSU\Graduate Classes\CIS 641 Systems Analysis and Design\STOP-sign.jpg");
+                // Replaced in Update ApplyShapeMatching(imgTemplate);
+
+                FormShapeMatchParameters form = new FormShapeMatchParameters();
+                form.OnShapeMatching += ApplyShapeMatching;
+                form.Show();
             }
             catch (Exception ex)
             {
@@ -60,7 +66,8 @@ namespace EmguCVDemoJmalino
             }
         }
 
-        private void ApplyShapeMatching(Image<Bgr, byte> imgTemplate, double threshold = 0.0001)
+        //default threshold for match
+        private void ApplyShapeMatching(Image<Bgr, byte> imgTemplate, double threshold = 0.0001, double area=1000, ContoursMatchType matchType = ContoursMatchType.I2)
         {
             try
             {
@@ -80,8 +87,8 @@ namespace EmguCVDemoJmalino
                     .ThresholdBinaryInv(new Gray(240), new Gray(255));
 
                 // get contours of source and target images
-                var imgSourceContours = CalculateContours(imgSource);
-                var imgTargetContours = CalculateContours(imgTarget);
+                var imgSourceContours = CalculateContours(imgSource, area);
+                var imgTargetContours = CalculateContours(imgTarget, area);
 
                 if (imgSourceContours.Size == 0 || imgTargetContours.Size == 0)
                 {
@@ -92,7 +99,7 @@ namespace EmguCVDemoJmalino
                 //loops through all contours in image and comparing to target
                 for (int i = 0; i < imgSourceContours.Size; i++)
                 {
-                    var distance = CvInvoke.MatchShapes(imgSourceContours[i], imgTargetContours[0], Emgu.CV.CvEnum.ContoursMatchType.I2);
+                    var distance = CvInvoke.MatchShapes(imgSourceContours[i], imgTargetContours[0], matchType);
 
                     if (distance<=threshold)
                     {
@@ -112,7 +119,7 @@ namespace EmguCVDemoJmalino
             }
         }
 
-        //calculate contrours, a necessary input for CvInvoke
+        //calculate contrours, a necessary input for CvInvoke, thresholdarea denotes default size
         private VectorOfVectorOfPoint CalculateContours(Image<Gray, byte> img, double thresholdarea = 1000)
         {
             try
