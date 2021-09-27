@@ -53,7 +53,7 @@ namespace EmguCVDemoJmalino
             {
                 // reads stop sign file from computer, default template to match uploaded images to
                 // will be replaced in future update to custom uploaded form
-                // Replaced in Update Image<Bgr, byte> imgTemplate = new Image<Bgr, byte>(@"C:\Users\jessa\OneDrive - Grand Valley State University\Documents\GVSU\Graduate Classes\CIS 641 Systems Analysis and Design\STOP-sign.jpg");
+                // Replaced in Update Image<Bgr, byte> imgTemplate = new Image<Bgr, byte>(@"C:\Users\jessa\Documents\Graduate Classes\Systems Analysis and Design\STOP-sign.jpg");
                 // Replaced in Update ApplyShapeMatching(imgTemplate);
 
                 FormShapeMatchParameters form = new FormShapeMatchParameters();
