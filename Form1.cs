@@ -150,5 +150,156 @@ namespace EmguCVDemoJmalino
                 throw new Exception(ex.Message);
             }
         }
+
+        private void toolStripMenuItemPregnancyTest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IMGDict.ContainsKey("Input"))
+                {
+                    throw new Exception("Read an Image");
+                }
+
+                // used for filtering outside of test image area
+                double threshold = 300;
+                VectorOfVectorOfPoint filteredContours = new VectorOfVectorOfPoint();
+
+                //clone it w/dict key, and smooth to reduce local noise, kernal size 3
+                var img = IMGDict["input"].Clone().SmoothGaussian(3);
+
+                //binarize the image
+                var binary = img.Convert<Gray, byte>()
+                    .ThresholdBinaryInv(new Gray(240), new Gray(255));
+
+                VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
+                Mat hierachy = new Mat();
+
+                CvInvoke.FindContours(binary, contours, hierachy, RetrType.External, ChainApproxMethod.ChainApproxSimple);
+                
+                // blank used for filtering later
+                var output = binary.CopyBlank();
+
+                //Filter out extra contours outside of image
+                for (int i = 0; i < contours.Size; i++)
+                {
+                    var area = CvInvoke.ContourArea(contours[i]);
+                    if (area>threshold)
+                    {
+                        filteredContours.Push(contours[i]);
+                        // drawing the contours allows us to adjust threshold
+                        //CvInvoke.DrawContours(output, contours, i, new MCvScalar(255), 2);
+                    }
+                }
+                for (int i = 0; i < filteredContours.Size; i++)
+                {
+                    var bbox = CvInvoke.BoundingRectangle(filteredContours[i]);
+                    binary.ROI = bbox;
+                    var rects = ProcessParts(binary);
+                    binary.ROI = Rectangle.Empty;
+
+                    int count = rects.Count;
+                    string msg = "";
+                    int margin = 25;
+                    MCvScalar color = new MCvScalar(0, 255, 0);
+
+                    switch(count)
+                    {
+                        case 1:
+                            msg = "Invalid"; // case when there is no control line, blank test area
+                            color = new MCvScalar(0, 0, 255);
+                            break;
+                        case 2:
+                            if (rects[0].Width*rects[0].Height < rects[1].Width*rects[1].Height)
+                            {
+                                msg = "Not Pregnant"; // case when there is only control line, no HCG line
+                            }
+                            else
+                            {
+                                msg = "Control line absent, HCG line positive, advise re-test"; // No control line but positive HCG line
+                            }
+                            color = new MCvScalar(0, 0, 255);
+                            break;
+                        case 3:
+                            msg = "Pregnant";
+                            color = new MCvScalar(0, 255, 0);
+                            break;
+                        default:
+                            msg = "Invalid";
+                            color = new MCvScalar(0, 0, 255);
+                            break;
+                    }
+                    // put the message to the window
+                    CvInvoke.PutText(img,msg,new Point(bbox.X + bbox.Width+margin, bbox.Y + margin), FontFace.HersheyPlain, 1.5, color, 2);
+
+                }
+
+                // allow us to look at output to adjust threshold
+                pictureBox1.Image = output.ToBitmap();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+    
+        private List<Rectangle> ProcessParts(Image<Gray, byte> img)
+        {
+            try
+            {
+                double areaThreshold = 200;
+                Rectangle rectangle = Rectangle.Empty;
+                img._Not();
+
+                var contours = new VectorOfVectorOfPoint();
+                var h = new Mat();
+                CvInvoke.FindContours(img,contours, h, RetrType.External, ChainApproxMethod.ChainApproxSimple);
+
+                List<Rectangle> bboxes = new List<Rectangle>();
+
+                for (int i = 0; i <contours.Size; i++)
+                {
+                    // filters out largest non-test area on left
+                    var area = CvInvoke.ContourArea(contours[i]);
+                    if (area>areaThreshold)
+                    {
+                        bboxes.Add(CvInvoke.BoundingRectangle(contours[i]));
+                    }
+                }
+                
+                //lambda function
+                var sortedBoxes = bboxes.OrderBy(b => b.X).ToList();
+
+                if (sortedBoxes.Count>2)
+                {
+                    //
+                    sortedBoxes.RemoveRange(sortedBoxes.Count - 2, 2);
+                }
+                else
+                {
+                    //
+                    sortedBoxes.Clear();
+                }
+
+                return sortedBoxes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private void toolStripMenuItemRotate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var img = new Bitmap(pictureBox1.Image).ToImage<Bgr, byte>()
+                    .Rotate(15, new Bgr(255, 255, 255));
+                pictureBox1.Image = img.ToBitmap();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

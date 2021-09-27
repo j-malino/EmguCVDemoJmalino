@@ -35,10 +35,12 @@ namespace EmguCVDemoJmalino
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.process = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemShapeMatching = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemPregnancyTest = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblmessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.toolStripMenuItemRotate = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -68,20 +70,22 @@ namespace EmguCVDemoJmalino
             // toolStripMenuItemOpen
             // 
             this.toolStripMenuItemOpen.Name = "toolStripMenuItemOpen";
-            this.toolStripMenuItemOpen.Size = new System.Drawing.Size(103, 22);
+            this.toolStripMenuItemOpen.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemOpen.Text = "Open";
             this.toolStripMenuItemOpen.Click += new System.EventHandler(this.toolStripMenuItemOpen_Click);
             // 
             // toolStripMenuItemExit
             // 
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
-            this.toolStripMenuItemExit.Size = new System.Drawing.Size(103, 22);
+            this.toolStripMenuItemExit.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemExit.Text = "Exit";
             // 
             // process
             // 
             this.process.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemShapeMatching});
+            this.toolStripMenuItemShapeMatching,
+            this.toolStripMenuItemPregnancyTest,
+            this.toolStripMenuItemRotate});
             this.process.Name = "process";
             this.process.Size = new System.Drawing.Size(59, 20);
             this.process.Text = "Process";
@@ -92,6 +96,13 @@ namespace EmguCVDemoJmalino
             this.toolStripMenuItemShapeMatching.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemShapeMatching.Text = "Shape Matching";
             this.toolStripMenuItemShapeMatching.Click += new System.EventHandler(this.toolStripMenuItemShapeMatching_Click);
+            // 
+            // toolStripMenuItemPregnancyTest
+            // 
+            this.toolStripMenuItemPregnancyTest.Name = "toolStripMenuItemPregnancyTest";
+            this.toolStripMenuItemPregnancyTest.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemPregnancyTest.Text = "Pregnancy Test";
+            this.toolStripMenuItemPregnancyTest.Click += new System.EventHandler(this.toolStripMenuItemPregnancyTest_Click);
             // 
             // panel1
             // 
@@ -130,6 +141,13 @@ namespace EmguCVDemoJmalino
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // toolStripMenuItemRotate
+            // 
+            this.toolStripMenuItemRotate.Name = "toolStripMenuItemRotate";
+            this.toolStripMenuItemRotate.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemRotate.Text = "Rotate";
+            this.toolStripMenuItemRotate.Click += new System.EventHandler(this.toolStripMenuItemRotate_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -166,6 +184,8 @@ namespace EmguCVDemoJmalino
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem process;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShapeMatching;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPregnancyTest;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRotate;
     }
 }
 
